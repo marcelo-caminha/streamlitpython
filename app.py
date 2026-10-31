@@ -1,14 +1,24 @@
+"""Ponto de entrada do dashboard: configuração global e navegação entre páginas.
+
+Execute com: streamlit run app.py
+"""
+
+import logging
+
 import streamlit as st
-import time
 
-print(f'Script rodou às {time.strftime("%H:%M:%S")}')
+from src import config
 
-st.title('Testando o modelo de execução do Streamlit')
+# set_page_config precisa ser o primeiro comando Streamlit da execução
+st.set_page_config(page_title=config.APP_TITLE, page_icon="💉", layout="wide")
 
-contador = 0 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
-valor = st.slider('Escolha um valor', 0, 10)
+with st.sidebar:
+    st.write(config.APP_TITLE)
+    st.image(config.SIDEBAR_IMAGE_URL)
 
-contador += 1
-st.write(f'Você escolheu o valor: {valor}')
-st.write(f'Contador: {contador}')
+pagina = st.navigation([
+    st.Page("pages/visao_geral.py", title="Visão geral", icon=":material/dashboard:", default=True),
+])
+pagina.run()
